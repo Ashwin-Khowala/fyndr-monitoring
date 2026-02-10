@@ -1,5 +1,11 @@
 global:
   resolve_timeout: 5m
+  # --- SMTP Configuration ---
+  smtp_smarthost: '${SMTP_SMARTHOST}'
+  smtp_from: '${SMTP_FROM}'
+  smtp_auth_username: '${SMTP_AUTH_USERNAME}'
+  smtp_auth_password: '${SMTP_AUTH_PASSWORD}'
+  smtp_require_tls: true
 
 # Route configuration
 route:
@@ -24,21 +30,16 @@ route:
 receivers:
   - name: 'default-receiver'
     # Add your notification channels here
-    # Example: email, slack, webhook, etc.
     
   - name: 'critical-alerts'
-    # Configure critical alert notifications
-    # Example for webhook:
-    # webhook_configs:
-    #   - url: 'http://your-webhook-url/critical'
-    #     send_resolved: true
+    email_configs:
+      - to: '${ALERT_EMAIL_DESTINATION}'
+        send_resolved: true
     
   - name: 'warning-alerts'
-    # Configure warning alert notifications
-    # Example for webhook:
-    # webhook_configs:
-    #   - url: 'http://your-webhook-url/warning'
-    #     send_resolved: true
+    email_configs:
+      - to: '${ALERT_EMAIL_DESTINATION}'
+        send_resolved: true
 
 # Inhibition rules (prevent duplicate alerts)
 inhibit_rules:

@@ -78,3 +78,26 @@ groups:
         annotations:
           summary: "Too many idle connections"
           description: "There are {{ $value }} idle connections on {{ $labels.instance }}"
+
+      # Warning: High RAM usage
+      - alert: HighRAMUsageWarning
+        expr: (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100 > 85
+        for: 5m
+        labels:
+          severity: warning
+          service: supabase
+        annotations:
+          summary: "High RAM usage"
+          description: "RAM usage is {{ $value | printf \"%.2f\" }}% on {{ $labels.instance }}"
+
+      # Critical: Critically high RAM usage
+      - alert: HighRAMUsageCritical
+        expr: (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100 > 95
+        for: 2m
+        labels:
+          severity: critical
+          service: supabase
+        annotations:
+          summary: "Critically high RAM usage"
+          description: "RAM usage is {{ $value | printf \"%.2f\" }}% on {{ $labels.instance }}. System may become unstable."
+

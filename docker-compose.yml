@@ -36,10 +36,21 @@ services:
 
   alertmanager:
     image: prom/alertmanager:latest
+    environment:
+      - SMTP_SMARTHOST=${SMTP_SMARTHOST}
+      - SMTP_FROM=${SMTP_FROM}
+      - SMTP_AUTH_USERNAME=${SMTP_AUTH_USERNAME}
+      - SMTP_AUTH_PASSWORD=${SMTP_AUTH_PASSWORD}
+      - ALERT_EMAIL_DESTINATION=${ALERT_EMAIL_DESTINATION}
     volumes:
-      - ./docker/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+      - ./docker/alertmanager/alertmanager.yml.template:/etc/alertmanager/alertmanager.yml.template
+      - ./docker/alertmanager/entrypoint.sh:/entrypoint.sh
     ports:
       - "9093:9093"
+    entrypoint: ["/bin/sh", "/entrypoint.sh"]
+    command:
+      - "--config.file=/etc/alertmanager/alertmanager.yml"
+      - "--storage.path=/alertmanager"
 
 volumes:
   prometheus_data:
