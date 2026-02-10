@@ -1,0 +1,20 @@
+# Environment variables (contains secrets)
+.env
+
+# Docker volumes
+prometheus_data/
+grafana_data/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
